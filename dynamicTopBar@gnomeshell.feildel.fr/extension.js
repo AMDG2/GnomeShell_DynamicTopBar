@@ -157,6 +157,8 @@ const GlobalManager = new Lang.Class({
 		this._currentWorkspace.updatePanelTransparency();
 
 		this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
+		this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
+		this._notifyHideOverviewId = Main.overview.connect('hiding',  Lang.bind(this, this._hideOverview));
 	},
 
 	_switchWorkspace: function(winManager, previousWkId, newWkId) {
@@ -166,8 +168,18 @@ const GlobalManager = new Lang.Class({
 		this._currentWorkspace.updatePanelTransparency();
 	},
 
+	_showOverview: function() {
+		this._transparencyManager.setTransparent();
+	},
+
+	_hideOverview: function() {
+		this._transparencyManager.setSolid();
+	},
+
 	_onDestroy: function() {
 		global.window_manager.disconnect(this._notifySwitchId);
+		Main.overview.disconnect(this._notifyShowOverviewId);
+		Main.overview.disconnect(this._notifyHideOverviewId);
 	}
 });
 
