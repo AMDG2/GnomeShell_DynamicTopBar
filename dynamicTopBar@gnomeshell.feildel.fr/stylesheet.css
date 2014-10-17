@@ -1,9 +1,18 @@
 .panel-transparency {
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0);
     transition: background-color 500ms;
 }
 
+.panel-transparency .panel-button {
+	color: #fff;
+	text-shadow: #000 0px 3px 5px;
+}
+
+.panel-transparency .system-status-icon {
+	icon-shadow: black 0px 3px 5px;
+}
+
 .corner-transparency {
-    -panel-corner-background-color: rgba(0,0,0,0.3);
+    -panel-corner-background-color: rgba(0,0,0,0);
     -panel-corner-border-color: transparent;
 }
