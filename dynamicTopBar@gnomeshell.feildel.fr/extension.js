@@ -58,7 +58,7 @@ const WindowManager = new Lang.Class({
 	},
 
 	isMaximized: function() {
-		return this._metaWindow.maximized_vertically;
+		return this._metaWindow.maximized_vertically && !this._metaWindow.minimized;
 	},
 
 	equals: function(metaWindow) {
