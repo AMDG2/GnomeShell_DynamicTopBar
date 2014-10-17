@@ -1,0 +1,9 @@
+.panel-transparency {
+    background-color: rgba(0,0,0,0.3);
+    transition: background-color 500ms;
+}
+
+.corner-transparency {
+    -panel-corner-background-color: rgba(0,0,0,0.3);
+    -panel-corner-border-color: transparent;
+}

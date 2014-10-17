@@ -1,0 +1,11 @@
+{
+  "description": "Dynamic top bar for Gnome Shell",
+  "name": "Dynamic Top Bar",
+  "shell-version": [
+    "3.12",
+    "3.14"
+  ],
+  "url": "http://github.com/AMDG2/GnomeShell_DynamicTopBar",
+  "uuid": "dynamicTopBar@gnomeshell.feildel.fr",
+  "version": 1
+}
