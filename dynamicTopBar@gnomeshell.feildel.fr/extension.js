@@ -16,6 +16,9 @@
 const Main = imports.ui.main;
 const Lang = imports.lang;
 
+//const panelModification = "gradient";
+const panelModification = "transparency";
+
 const PanelTransparencyManager = new Lang.Class({
 	Name: 'PanelTransparencyManager',
 
@@ -25,16 +28,16 @@ const PanelTransparencyManager = new Lang.Class({
 
 	setTransparent: function() {
 		// Add transparency
-		this._panel.actor.add_style_class_name('panel-transparency');
-		this._panel._leftCorner.actor.add_style_class_name('corner-transparency');
-		this._panel._rightCorner.actor.add_style_class_name('corner-transparency');
+		this._panel.actor.add_style_class_name('panel-' + panelModification);
+		this._panel._leftCorner.actor.add_style_class_name('corner-' + panelModification);
+		this._panel._rightCorner.actor.add_style_class_name('corner-' + panelModification);
 	},
 
 	setSolid: function() {
 		// Restore opacity
-		this._panel.actor.remove_style_class_name('panel-transparency');
-		this._panel._leftCorner.actor.remove_style_class_name('corner-transparency');
-		this._panel._rightCorner.actor.remove_style_class_name('corner-transparency');
+		this._panel.actor.remove_style_class_name('panel-' + panelModification);
+		this._panel._leftCorner.actor.remove_style_class_name('corner-' + panelModification);
+		this._panel._rightCorner.actor.remove_style_class_name('corner-' + panelModification);
 	}
 });
 

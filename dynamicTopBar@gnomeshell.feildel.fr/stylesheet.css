@@ -1,6 +1,9 @@
+/*
+ * Transparency
+ */
 .panel-transparency {
-    background-color: rgba(0,0,0,0);
-    transition: background-color 500ms;
+	background-color: rgba(0,0,0,0);
+	transition: background-color 500ms;
 }
 
 .panel-transparency .panel-button {
@@ -13,6 +16,21 @@
 }
 
 .corner-transparency {
-    -panel-corner-background-color: rgba(0,0,0,0);
-    -panel-corner-border-color: transparent;
+	-panel-corner-background-color: rgba(0,0,0,0);
+	-panel-corner-border-color: transparent;
+}
+
+/*
+ * Gradients
+ */
+.panel-gradient {
+    background-color: transparent;
+    background-gradient-start: rgba(0,0,0,0.8);
+    background-gradient-end: rgba(0,0,0,0);
+    background-gradient-direction: vertical;
+}
+
+.corner-gradient {
+    background-color: transparent;
+    -panel-corner-radius: 0;
 }
