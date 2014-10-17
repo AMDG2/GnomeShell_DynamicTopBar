@@ -14,5 +14,8 @@ then activate the extensions with Gnome Tweak Tool
 for example.
 
 ```bash
-$ cp dynamicTopBar@gnomeshell.feildel.fr ~/.local/share/gnome-shell/extensions
+cp -r dynamicTopBar@gnomeshell.feildel.fr ~/.local/share/gnome-shell/extensions
+gnome-shell-extension-tool -e dynamicTopBar@gnomeshell.feildel.fr
 ```
+
+Or you can use the `install.sh` script.
