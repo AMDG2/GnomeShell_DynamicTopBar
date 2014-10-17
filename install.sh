@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "Copy the extension files..."
+echo "Copying extension files..."
 cp -r dynamicTopBar@gnomeshell.feildel.fr ~/.local/share/gnome-shell/extensions
-echo "Enable the extension"
+echo "Enabling extension..."
 gnome-shell-extension-tool -e dynamicTopBar@gnomeshell.feildel.fr
-
