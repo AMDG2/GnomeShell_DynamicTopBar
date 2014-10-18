@@ -176,7 +176,7 @@ const GlobalManager = new Lang.Class({
 	},
 
 	_hideOverview: function() {
-		this._transparencyManager.setSolid();
+		this._currentWorkspace.updatePanelTransparency();
 	},
 
 	_onDestroy: function() {
@@ -188,7 +188,7 @@ const GlobalManager = new Lang.Class({
 
 
 /*
- * Global letiables
+ * Global variables
  */
 let topPanelTransparencyManager;
 let globalManager;
