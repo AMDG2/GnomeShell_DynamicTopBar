@@ -5,6 +5,9 @@ Dynamic Top Bar is a Gnome Shell extension
 that make the top bar transparent when no
 window is maximized.
 
+Demo
+====
+![GIF Demo](https://feildel.fr/gnome-shell/dynamic-status-bar.gif)
 
 How-To Install
 ==============
