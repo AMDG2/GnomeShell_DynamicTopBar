@@ -162,21 +162,27 @@ const GlobalManager = new Lang.Class({
 		this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
 		this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
 		this._notifyHideOverviewId = Main.overview.connect('hiding',  Lang.bind(this, this._hideOverview));
+		this._overviewOpen = false;
 	},
 
 	_switchWorkspace: function(winManager, previousWkId, newWkId) {
 		this._currentWorkspace.destroy();
 		delete this._currentWorkspace;
 		this._currentWorkspace = new WorkspaceManager(this._transparencyManager, global.screen.get_workspace_by_index(newWkId));
-		this._currentWorkspace.updatePanelTransparency();
+		if(this._overviewOpen)
+			this._transparencyManager.setTransparent();
+		else
+			this._currentWorkspace.updatePanelTransparency();
 	},
 
 	_showOverview: function() {
 		this._transparencyManager.setTransparent();
+		this._overviewOpen = true;
 	},
 
 	_hideOverview: function() {
 		this._currentWorkspace.updatePanelTransparency();
+		this._overviewOpen = false;
 	},
 
 	_onDestroy: function() {
