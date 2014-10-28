@@ -15,29 +15,59 @@
 
 const Main = imports.ui.main;
 const Lang = imports.lang;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
 
-//const panelModification = "gradient";
-const panelModification = "transparency";
+
+/* Debug tool */
+const St = imports.gi.St;
+const Mainloop = imports.mainloop;
+
+function _showMessage(msg) {
+    let label = new St.Label({ style_class: 'debug-label', text: msg });
+    let monitor = Main.layoutManager.primaryMonitor;
+    global.stage.add_actor(label);
+    label.set_position(Math.floor (monitor.width / 2 - label.width / 2), Math.floor(monitor.height / 2 - label.height / 2));
+    Mainloop.timeout_add(3000, function () { label.destroy(); });
+}
+
 
 const PanelTransparencyManager = new Lang.Class({
 	Name: 'PanelTransparencyManager',
 
-	_init: function(panel) {
+	_init: function(panel, style) {
 		this._panel = panel;
+		this._style = style || 'transparency';
+		this._isTransp= true;
+	},
+
+	updateStyle: function(newStyle) {
+		let retransp = false;
+		if(this._isTransp) {
+			this.setSolid();
+			retransp = true;
+		}
+		this._style = newStyle;
+		if(retransp) this.setTransparent();
 	},
 
 	setTransparent: function() {
 		// Add transparency
-		this._panel.actor.add_style_class_name('panel-' + panelModification);
-		this._panel._leftCorner.actor.add_style_class_name('corner-' + panelModification);
-		this._panel._rightCorner.actor.add_style_class_name('corner-' + panelModification);
+		//_showMessage("Style used : " + this._style);
+		this._isTransp = true;
+		this._panel.actor.add_style_class_name('panel-' + this._style);
+		this._panel._leftCorner.actor.add_style_class_name('corner-' + this._style);
+		this._panel._rightCorner.actor.add_style_class_name('corner-' + this._style);
 	},
 
 	setSolid: function() {
 		// Restore opacity
-		this._panel.actor.remove_style_class_name('panel-' + panelModification);
-		this._panel._leftCorner.actor.remove_style_class_name('corner-' + panelModification);
-		this._panel._rightCorner.actor.remove_style_class_name('corner-' + panelModification);
+		//_showMessage("Style used : solid");
+		this._isTransp = false;
+		this._panel.actor.remove_style_class_name('panel-' + this._style);
+		this._panel._leftCorner.actor.remove_style_class_name('corner-' + this._style);
+		this._panel._rightCorner.actor.remove_style_class_name('corner-' + this._style);
 	}
 });
 
@@ -154,7 +184,8 @@ const WorkspaceManager = new Lang.Class({
 const GlobalManager = new Lang.Class({
 	Name: 'WorkspaceList',
 
-	_init: function(transparencyManager) {
+	_init: function(transparencyManager, settings) {
+		this._settings = settings;
 		this._transparencyManager = transparencyManager;
 		this._currentWorkspace = new WorkspaceManager(transparencyManager, global.screen.get_active_workspace());
 		this._currentWorkspace.updatePanelTransparency();
@@ -163,6 +194,8 @@ const GlobalManager = new Lang.Class({
 		this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
 		this._notifyHideOverviewId = Main.overview.connect('hiding',  Lang.bind(this, this._hideOverview));
 		this._overviewOpen = false;
+
+		this._notifySettingsId = this._settings.connect('changed', Lang.bind(this, this._settingsUpdate))
 	},
 
 	_switchWorkspace: function(winManager, previousWkId, newWkId) {
@@ -189,6 +222,13 @@ const GlobalManager = new Lang.Class({
 		global.window_manager.disconnect(this._notifySwitchId);
 		Main.overview.disconnect(this._notifyShowOverviewId);
 		Main.overview.disconnect(this._notifyHideOverviewId);
+		this._settings.disconnect(this._notifySettingsId);
+	},
+
+	_settingsUpdate: function() {
+		//_showMessage('New style value ' + this._settings.get_string('style'));
+		this._transparencyManager.updateStyle(this._settings.get_string('style'));
+		this._currentWorkspace.updatePanelTransparency();
 	}
 });
 
@@ -198,6 +238,7 @@ const GlobalManager = new Lang.Class({
  */
 let topPanelTransparencyManager;
 let globalManager;
+let preferences;
 
 /*
  * Extensions standard functions
@@ -206,8 +247,9 @@ function init() {
 }
 
 function enable() {
-	topPanelTransparencyManager = new PanelTransparencyManager(Main.panel);
-	workspaceManager = new GlobalManager(topPanelTransparencyManager);
+	preferences = Convenience.getSettings();
+	topPanelTransparencyManager = new PanelTransparencyManager(Main.panel, preferences.get_string('style'));
+	workspaceManager = new GlobalManager(topPanelTransparencyManager, preferences);
 }
 
 function disable() {
