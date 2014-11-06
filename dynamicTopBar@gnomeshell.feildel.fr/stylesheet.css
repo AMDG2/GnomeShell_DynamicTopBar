@@ -15,6 +15,10 @@
 	icon-shadow: black 0px 3px 5px;
 }
 
+.panel-transparency .popup-menu-arrow {
+	icon-shadow: rgba(0,0,0,0.5) 0px 3px 5px;
+}
+
 .corner-transparency {
 	-panel-corner-background-color: rgba(0,0,0,0);
 	-panel-corner-border-color: transparent;
@@ -32,7 +36,7 @@
 
 .corner-gradient {
     background-color: transparent;
-    -panel-corner-radius: 0;
+    -panel-corner-radius: 6px;
 }
 
 .debug-label {
