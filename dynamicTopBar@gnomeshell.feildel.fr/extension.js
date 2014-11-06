@@ -94,6 +94,10 @@ const WindowManager = new Lang.Class({
 		return this._metaWindow.maximized_vertically && !this._metaWindow.minimized;
 	},
 
+	getMonitorIdex: function() {
+		return global.screen.get_monitor_index_for_rect(this._metaWindow.get_outer_rect());
+	},
+
 	equals: function(metaWindow) {
 		return metaWindow == this._metaWindow;
 	},
@@ -115,6 +119,7 @@ const WorkspaceManager = new Lang.Class({
 		this._transparencyManager = transparencyManager;
 		this._metaWorkspace = metaWorkspace;
 		this._windowList = this.getWindowList();
+		this._primaryMonitor = Main.layoutManager.primaryMonitor.index;
 
 		this._notifyWindowAddedId = this._metaWorkspace.connect('window-added', Lang.bind(this, this._addWindow));
 		this._notifyWindowRemovedId = this._metaWorkspace.connect('window-removed', Lang.bind(this, this._removeWindow));
@@ -131,9 +136,10 @@ const WorkspaceManager = new Lang.Class({
 	},
 
 	isAnyWindowMaximized: function() {
-		for(let i = 0 ; i < this._windowList.length ; i++)
-			if(this._windowList[i].isMaximized())
+		for(let i = 0 ; i < this._windowList.length ; i++) {
+			if(this._windowList[i].isMaximized() && this._windowList[i].getMonitorIdex() == this._primaryMonitor)
 				return true;
+		}
 		return false;
 	},
 
