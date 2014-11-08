@@ -106,6 +106,10 @@ const WindowManager = new Lang.Class({
 		this._metaWindow.disconnect(this._notifyMinimizeId);
 		this._metaWindow.disconnect(this._notifyMaximizeHId);
 		this._metaWindow.disconnect(this._notifyMaximizeVId);
+	},
+
+	destroy: function() {
+		this._onDestroy();
 	}
 });
 
@@ -165,6 +169,12 @@ const WorkspaceManager = new Lang.Class({
 	},
 
 	_removeWindow: function(metaWorkspace, metaWindow) {
+		for (let i = 0 ; i < this._windowList.length; i++)
+			if(this._windowList[i].equals(metaWindow)){
+				this._windowList[i].destroy();
+				this._windowList.splice(i, 1);
+			}	
+
 		this.updatePanelTransparency();
 	},
 
