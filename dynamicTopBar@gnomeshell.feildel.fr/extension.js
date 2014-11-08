@@ -262,7 +262,7 @@ function init() {
 function enable() {
 	preferences = Convenience.getSettings();
 	topPanelTransparencyManager = new PanelTransparencyManager(Main.panel, preferences.get_string('style'));
-	workspaceManager = new GlobalManager(topPanelTransparencyManager, preferences);
+	new GlobalManager(topPanelTransparencyManager, preferences);
 }
 
 function disable() {
