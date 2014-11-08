@@ -179,6 +179,9 @@ const WorkspaceManager = new Lang.Class({
 	},
 
 	_onDestroy: function() {
+		for (let i = 0 ; i < this._windowList.length; i++)
+			this._windowList[i].destroy();
+
 		this._metaWorkspace.disconnect(this._notifyWindowAddedId);
 		this._metaWorkspace.disconnect(this._notifyWindowRemovedId);
 	},
