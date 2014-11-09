@@ -106,6 +106,10 @@ const WindowManager = new Lang.Class({
 		this._metaWindow.disconnect(this._notifyMinimizeId);
 		this._metaWindow.disconnect(this._notifyMaximizeHId);
 		this._metaWindow.disconnect(this._notifyMaximizeVId);
+	},
+
+	destroy: function() {
+		this._onDestroy();
 	}
 });
 
@@ -165,10 +169,19 @@ const WorkspaceManager = new Lang.Class({
 	},
 
 	_removeWindow: function(metaWorkspace, metaWindow) {
+		for (let i = 0 ; i < this._windowList.length; i++)
+			if(this._windowList[i].equals(metaWindow)){
+				this._windowList[i].destroy();
+				this._windowList.splice(i, 1);
+			}	
+
 		this.updatePanelTransparency();
 	},
 
 	_onDestroy: function() {
+		for (let i = 0 ; i < this._windowList.length; i++)
+			this._windowList[i].destroy();
+
 		this._metaWorkspace.disconnect(this._notifyWindowAddedId);
 		this._metaWorkspace.disconnect(this._notifyWindowRemovedId);
 	},
@@ -249,7 +262,7 @@ function init() {
 function enable() {
 	preferences = Convenience.getSettings();
 	topPanelTransparencyManager = new PanelTransparencyManager(Main.panel, preferences.get_string('style'));
-	workspaceManager = new GlobalManager(topPanelTransparencyManager, preferences);
+	new GlobalManager(topPanelTransparencyManager, preferences);
 }
 
 function disable() {
