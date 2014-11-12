@@ -28,7 +28,7 @@ function _showMessage(msg) {
     let label = new St.Label({ style_class: 'debug-label', text: msg });
     let monitor = Main.layoutManager.primaryMonitor;
     global.stage.add_actor(label);
-    label.set_position(Math.floor (monitor.width / 2 - label.width / 2), Math.floor(monitor.height / 2 - label.height / 2));
+    label.set_position(Math.floor(monitor.width / 2 - label.width / 2), Math.floor(monitor.height / 2 - label.height / 2));
     Mainloop.timeout_add(3000, function () { label.destroy(); });
 }
 
@@ -143,6 +143,10 @@ const WorkspaceManager = new Lang.Class({
 		for(let i = 0 ; i < this._windowList.length ; i++) {
 			if(this._windowList[i].isMaximized() && this._windowList[i].getMonitorIdex() == this._primaryMonitor)
 				return true;
+
+			// Support DropDownTerminal https://github.com/zzrough/gs-extensions-drop-down-terminal
+			if(this._windowList[i]._metaWindow.get_wm_class() == "DropDownTerminalWindow")
+				return true;
 		}
 		return false;
 	},
@@ -173,7 +177,7 @@ const WorkspaceManager = new Lang.Class({
 			if(this._windowList[i].equals(metaWindow)){
 				this._windowList[i].destroy();
 				this._windowList.splice(i, 1);
-			}	
+			}
 
 		this.updatePanelTransparency();
 	},

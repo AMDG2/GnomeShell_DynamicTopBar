@@ -39,11 +39,14 @@
     -panel-corner-radius: 6px;
 }
 
+/*
+ * Debug
+ */
 .debug-label {
     font-size: 36px;
     font-weight: bold;
     color: #ffffff;
-    background-color: rgba(10,10,10,0.7);
+    background-color: rgba(10,10,10,0.9);
     border-radius: 5px;
     padding: 15px;
 }
