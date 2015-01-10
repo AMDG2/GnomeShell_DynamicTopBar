@@ -19,7 +19,7 @@
 	icon-shadow: rgba(0,0,0,0.5) 0px 3px 5px;
 }
 
-.corner-transparency {
+.corner-transparency, .corner-gradient {
 	-panel-corner-background-color: rgba(0,0,0,0);
 	-panel-corner-border-color: transparent;
 }
@@ -32,11 +32,6 @@
     background-gradient-start: rgba(0,0,0,0.8);
     background-gradient-end: rgba(0,0,0,0);
     background-gradient-direction: vertical;
-}
-
-.corner-gradient {
-    background-color: transparent;
-    -panel-corner-radius: 6px;
 }
 
 /*
