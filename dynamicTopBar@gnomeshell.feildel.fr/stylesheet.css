@@ -1,52 +1,18 @@
 /*
  * Transparency
  */
-.panel-transparency {
-	background-color: rgba(0,0,0,0);
-	transition: background-color 500ms;
+.dynamic-top-bar-white-btn .panel-button {
+	color: #fff;
 }
 
-.panel-transparency .panel-button {
-	color: #fff;
+.dynamic-top-bar-btn-shadow .panel-button {
 	text-shadow: #000 0px 3px 5px;
 }
 
-.panel-transparency .system-status-icon {
+.dynamic-top-bar-btn-shadow .system-status-icon {
 	icon-shadow: black 0px 3px 5px;
 }
 
-.panel-transparency .popup-menu-arrow {
+.dynamic-top-bar-btn-shadow .popup-menu-arrow {
 	icon-shadow: rgba(0,0,0,0.5) 0px 3px 5px;
-}
-
-.corner-transparency {
-	-panel-corner-background-color: rgba(0,0,0,0);
-	-panel-corner-border-color: transparent;
-}
-
-/*
- * Gradients
- */
-.panel-gradient {
-    background-color: transparent;
-    background-gradient-start: rgba(0,0,0,0.8);
-    background-gradient-end: rgba(0,0,0,0);
-    background-gradient-direction: vertical;
-}
-
-.corner-gradient {
-    background-color: transparent;
-    -panel-corner-radius: 6px;
-}
-
-/*
- * Debug
- */
-.debug-label {
-    font-size: 36px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: rgba(10,10,10,0.9);
-    border-radius: 5px;
-    padding: 15px;
 }
