@@ -10,5 +10,15 @@
       <default>'transparency'</default>
       <summary>Choose the top bar transparency style : gradient or full transparency</summary>
     </key>
+
+    <key name="transparency-level" type="d">
+      <default>0</default>
+      <summary>Transparency level, 0 fully transparent, 1 fully opaque</summary>
+    </key>
+
+    <key name="button-shadow" type="b">
+        <default>true</default>
+        <summary>Display a shadow below buttons</summary>
+    </key>
   </schema>
 </schemalist>

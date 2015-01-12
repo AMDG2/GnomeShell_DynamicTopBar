@@ -20,233 +20,372 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
 
-/* Debug tool */
-const St = imports.gi.St;
-const Mainloop = imports.mainloop;
-
-function _showMessage(msg) {
-    let label = new St.Label({ style_class: 'debug-label', text: msg });
-    let monitor = Main.layoutManager.primaryMonitor;
-    global.stage.add_actor(label);
-    label.set_position(Math.floor(monitor.width / 2 - label.width / 2), Math.floor(monitor.height / 2 - label.height / 2));
-    Mainloop.timeout_add(3000, function () { label.destroy(); });
+/*
+ * Debug tool
+ * To debug this extension you can start a gnome-shell instance
+ * from a terminal :
+ *
+ * $ gnome-shell --replace
+ *
+ * And then use debug() function to display message in the console.
+ */
+function debug(msg, level) {
+    /*if (typeof level == 'string')
+        level = ' ' + level + ' **: ';
+    else
+        level = '';
+    global.log('DynamicTopBar: ' + level + msg);*/
 }
 
-
+/*
+ * Panel transparency manager
+ */
 const PanelTransparencyManager = new Lang.Class({
-	Name: 'PanelTransparencyManager',
+    Name: 'PanelTransparencyManager',
 
-	_init: function(panel, style) {
-		this._panel = panel;
-		this._style = style || 'transparency';
-		this._isTransp= true;
-	},
+    /**
+     * Constructor
+     * @param  {Object} panel The panel to manage
+     * @param  {String} style The style to use, could be 'transparency' or 'gradient'
+     */
+    _init: function(panel, style, transparencyLevel, buttonShadow) {
+        this._panel = panel.actor;
+        this._leftCorner  = panel._leftCorner.actor;
+        this._rightCorner = panel._rightCorner.actor;
+        this._style = style || 'transparency';
+        this._isTransp = true;
 
-	updateStyle: function(newStyle) {
-		let retransp = false;
-		if(this._isTransp) {
-			this.setSolid();
-			retransp = true;
-		}
-		this._style = newStyle;
-		if(retransp) this.setTransparent();
-	},
+        this._btnShadow = buttonShadow;
 
-	setTransparent: function() {
-		// Add transparency
-		//_showMessage("Style used : " + this._style);
-		this._isTransp = true;
-		this._panel.actor.add_style_class_name('panel-' + this._style);
-		this._panel._leftCorner.actor.add_style_class_name('corner-' + this._style);
-		this._panel._rightCorner.actor.add_style_class_name('corner-' + this._style);
-	},
+        this._color = {
+            'r': 0,
+            'g': 0,
+            'b': 0,
+            'a': transparencyLevel
+        };
+    },
 
-	setSolid: function() {
-		// Restore opacity
-		//_showMessage("Style used : solid");
-		this._isTransp = false;
-		this._panel.actor.remove_style_class_name('panel-' + this._style);
-		this._panel._leftCorner.actor.remove_style_class_name('corner-' + this._style);
-		this._panel._rightCorner.actor.remove_style_class_name('corner-' + this._style);
-	}
+    /**
+     * Change the transparency style of the panel
+     * @param  {String} newStyle The new style to use, could be 'transparency' or 'gradient'
+     */
+    updateStyle: function(newStyle) {
+        let retransp = false;
+        if (this._isTransp) {
+            this.setSolid();
+            retransp = true;
+        }
+
+        if (newStyle == 'transparency' || newStyle == 'gradient')
+            this._style = newStyle;
+
+        if (retransp) this.setTransparent();
+    },
+
+    updateTransparencyLevel: function(newLevel) {
+        let retransp = false;
+        if(this._isTransp) {
+            this.setSolid();
+            retransp = true;
+        }
+
+        if(newLevel >= 0 && newLevel <= 1)
+            this._color.a = newLevel;
+
+        if(retransp) this.setTransparent();
+    },
+
+    updateButtonShadow: function(newBool) {
+        let retransp = false;
+        if(this._isTransp) {
+            this.setSolid();
+            retransp = true;
+        }
+
+        this._btnShadow = newBool;
+
+        if(retransp) this.setTransparent();
+    },
+
+    /**
+     * Set the panel transparent
+     */
+    setTransparent: function() {
+        // Add transparency
+        debug('Style used : ' + this._style, 'Notice');
+        this._isTransp = true;
+        this._applyStyle();
+    },
+
+    /**
+     * The the panel solid
+     */
+    setSolid: function() {
+        // Restore opacity
+        debug('Style used : solid', 'Notice');
+        this._isTransp = false;
+        this._resetStyle();
+    },
+
+    _setStyle: function(styles) {
+        for (var i = 0; i < styles.length; i++) {
+            if (typeof styles[i][0].set_style == 'function') {
+                if (typeof styles[i][1] == 'string')
+                    styles[i][0].set_style(styles[i][1]);
+                else
+                    styles[i][0].set_style('');
+            } else
+                debug('styles[' + i + '][0].set_style is not a function, it is : ' + typeof styles[i][0].set_style, 'Warning');
+        }
+    },
+
+    _resetStyle: function() {
+        this._panel.set_style('');
+        this._leftCorner.set_style('');
+        this._rightCorner.set_style('');
+
+        this._panel.remove_style_class_name('dynamic-top-bar-white-btn');
+        this._panel.remove_style_class_name('dynamic-top-bar-btn-shadow');
+    },
+
+    _applyStyle: function() {
+        let style = '';
+        let corner_style = '';
+        switch (this._style) {
+            case 'gradient':
+                style = 'background-color: transparent;';
+                style += 'background-gradient-start: rgba(0,0,0,0.8);';
+                style += 'background-gradient-end: rgba(0,0,0,0);';
+                style += 'background-gradient-direction: vertical;';
+
+                corner_style = '-panel-corner-background-color: transparent;';
+                corner_style += '-panel-corner-border-color: transparent;';
+            break;
+
+            case 'transparency':
+            default:
+                style = 'background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
+
+                corner_style = '-panel-corner-background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
+                corner_style += '-panel-corner-border-color: transparent;';
+            break;
+        }
+
+        this._panel.add_style_class_name('dynamic-top-bar-white-btn');
+
+        if(this._btnShadow)
+            this._panel.add_style_class_name('dynamic-top-bar-btn-shadow');
+        else
+            this._panel.remove_style_class_name('dynamic-top-bar-btn-shadow');
+
+        this._setStyle([
+            [this._panel, style],
+            [this._leftCorner, corner_style],
+            [this._rightCorner, corner_style]
+        ]);
+    }
 });
 
 /*
  * Window Manager
+ * This class provide interface to work with windows
  */
 const WindowManager = new Lang.Class({
-	Name: 'WindowManager',
+    Name: 'WindowManager',
 
-	_init: function(window, workspace) {
-		this._metaWindow = window;
-		this._workspace = workspace;
+    /**
+     * Constructor
+     * @param  {Object} window    The window to manage
+     * @param  {Object} workspace The workspace containing the window
+     */
+    _init: function(window, workspace) {
+        this._metaWindow = window;
+        this._workspace = workspace;
 
-		this._notifyMinimizeId  = this._metaWindow.connect('notify::minimized', Lang.bind(this, this._update));
-		this._notifyMaximizeVId = this._metaWindow.connect('notify::maximized-vertically', Lang.bind(this, this._update));
-		this._notifyMaximizeHId = this._metaWindow.connect('notify::maximized-horizontally', Lang.bind(this, this._update));
-	},
+        this._notifyMinimizeId = this._metaWindow.connect('notify::minimized', Lang.bind(this, this._update));
+        this._notifyMaximizeVId = this._metaWindow.connect('notify::maximized-vertically', Lang.bind(this, this._update));
+        this._notifyMaximizeHId = this._metaWindow.connect('notify::maximized-horizontally', Lang.bind(this, this._update));
+    },
 
-	_update: function() {
-		this._workspace.updatePanelTransparency();
-	},
+    /**
+     * Require the workspace to update it's state
+     * This function is called on maximize, minize and restore events
+     */
+    _update: function() {
+        this._workspace.updatePanelTransparency();
+    },
 
-	isMaximized: function() {
-		return this._metaWindow.maximized_vertically && !this._metaWindow.minimized;
-	},
+    /**
+     * Test if the window is maximized
+     * @return {Boolean} true is window is maximized, false otherwise
+     */
+    isMaximized: function() {
+        return this._metaWindow.maximized_vertically && !this._metaWindow.minimized;
+    },
 
-	getMonitorIdex: function() {
-		return global.screen.get_monitor_index_for_rect(this._metaWindow.get_outer_rect());
-	},
+    /**
+     * Get the monitor index which contain the window
+     * @return {Number} The monitor index
+     */
+    getMonitorIndex: function() {
+        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_outer_rect());
+    },
 
-	equals: function(metaWindow) {
-		return metaWindow == this._metaWindow;
-	},
+    /**
+     * Test if the object manage metaWindow
+     * @param  {Object} metaWindow The window to test
+     * @return {Boolean}           true if metaWindow is managed by the object, false otherwise
+     */
+    equals: function(metaWindow) {
+        return metaWindow == this._metaWindow;
+    },
 
-	_onDestroy: function() {
-		this._metaWindow.disconnect(this._notifyMinimizeId);
-		this._metaWindow.disconnect(this._notifyMaximizeHId);
-		this._metaWindow.disconnect(this._notifyMaximizeVId);
-	},
-
-	destroy: function() {
-		this._onDestroy();
-	}
+    /**
+     * Destructor, removes event manager
+     */
+    destroy: function() {
+        this._metaWindow.disconnect(this._notifyMinimizeId);
+        this._metaWindow.disconnect(this._notifyMaximizeHId);
+        this._metaWindow.disconnect(this._notifyMaximizeVId);
+    }
 });
 
 /*
  * Workspace Manager
  */
 const WorkspaceManager = new Lang.Class({
-	Name: 'WorkspaceManager',
+    Name: 'WorkspaceManager',
 
-	_init: function(transparencyManager, metaWorkspace) {
-		this._transparencyManager = transparencyManager;
-		this._metaWorkspace = metaWorkspace;
-		this._windowList = this.getWindowList();
-		this._primaryMonitor = Main.layoutManager.primaryMonitor.index;
+    _init: function(transparencyManager, metaWorkspace) {
+        this._transparencyManager = transparencyManager;
+        this._metaWorkspace = metaWorkspace;
+        this._windowList = this.getWindowList();
+        this._primaryMonitor = Main.layoutManager.primaryMonitor.index;
 
-		this._notifyWindowAddedId = this._metaWorkspace.connect('window-added', Lang.bind(this, this._addWindow));
-		this._notifyWindowRemovedId = this._metaWorkspace.connect('window-removed', Lang.bind(this, this._removeWindow));
-	},
+        this._notifyWindowAddedId = this._metaWorkspace.connect('window-added', Lang.bind(this, this._addWindow));
+        this._notifyWindowRemovedId = this._metaWorkspace.connect('window-removed', Lang.bind(this, this._removeWindow));
+    },
 
-	getWindowList: function() {
-		let tmpList = this._metaWorkspace.list_windows();
-		let outList = [];
+    getWindowList: function() {
+        let tmpList = this._metaWorkspace.list_windows();
+        let outList = [];
 
-		for(let i = 0 ; i < tmpList.length ; i++)
-			outList.push(new WindowManager(tmpList[i], this));
+        for (let i = 0; i < tmpList.length; i++)
+            outList.push(new WindowManager(tmpList[i], this));
 
-		return outList;
-	},
+        return outList;
+    },
 
-	isAnyWindowMaximized: function() {
-		for(let i = 0 ; i < this._windowList.length ; i++) {
-			if(this._windowList[i].isMaximized() && this._windowList[i].getMonitorIdex() == this._primaryMonitor)
-				return true;
+    isAnyWindowMaximized: function() {
+        for (let i = 0; i < this._windowList.length; i++) {
+            if (this._windowList[i].isMaximized() && this._windowList[i].getMonitorIndex() == this._primaryMonitor)
+                return true;
 
-			// Support DropDownTerminal https://github.com/zzrough/gs-extensions-drop-down-terminal
-			if(this._windowList[i]._metaWindow.get_wm_class() == "DropDownTerminalWindow")
-				return true;
-		}
-		return false;
-	},
+            // Support DropDownTerminal https://github.com/zzrough/gs-extensions-drop-down-terminal
+            if (this._windowList[i]._metaWindow.get_wm_class() == 'DropDownTerminalWindow')
+                return true;
+        }
+        return false;
+    },
 
-	updatePanelTransparency: function() {
-		if(this.isAnyWindowMaximized())
-			this._transparencyManager.setSolid();
-		else
-			this._transparencyManager.setTransparent();
-	},
+    updatePanelTransparency: function() {
+        if (this.isAnyWindowMaximized())
+            this._transparencyManager.setSolid();
+        else
+            this._transparencyManager.setTransparent();
+    },
 
-	_haveWindow: function(metaWindow) {
-		for(let i = 0 ; i < this._windowList.length ; i++)
-			if(this._windowList[i].equals(metaWindow))
-				return true;
-		return false;
-	},
+    _haveWindow: function(metaWindow) {
+        for (let i = 0; i < this._windowList.length; i++)
+            if (this._windowList[i].equals(metaWindow))
+                return true;
+        return false;
+    },
 
-	_addWindow: function(metaWorkspace, metaWindow) {
-		if(!this._haveWindow(metaWindow))
-			this._windowList.push(new WindowManager(metaWindow, this));
+    _addWindow: function(metaWorkspace, metaWindow) {
+        if (!this._haveWindow(metaWindow))
+            this._windowList.push(new WindowManager(metaWindow, this));
 
-		this.updatePanelTransparency();
-	},
+        this.updatePanelTransparency();
+    },
 
-	_removeWindow: function(metaWorkspace, metaWindow) {
-		for (let i = 0 ; i < this._windowList.length; i++)
-			if(this._windowList[i].equals(metaWindow)){
-				this._windowList[i].destroy();
-				this._windowList.splice(i, 1);
-			}
+    _removeWindow: function(metaWorkspace, metaWindow) {
+        for (let i = 0; i < this._windowList.length; i++)
+            if (this._windowList[i].equals(metaWindow)) {
+                this._windowList[i].destroy();
+                this._windowList.splice(i, 1);
+            }
 
-		this.updatePanelTransparency();
-	},
+        this.updatePanelTransparency();
+    },
 
-	_onDestroy: function() {
-		for (let i = 0 ; i < this._windowList.length; i++)
-			this._windowList[i].destroy();
+    _onDestroy: function() {
+        for (let i = 0; i < this._windowList.length; i++)
+            this._windowList[i].destroy();
 
-		this._metaWorkspace.disconnect(this._notifyWindowAddedId);
-		this._metaWorkspace.disconnect(this._notifyWindowRemovedId);
-	},
+        this._metaWorkspace.disconnect(this._notifyWindowAddedId);
+        this._metaWorkspace.disconnect(this._notifyWindowRemovedId);
+    },
 
-	destroy: function() {
-		this._onDestroy();
-		this._transparencyManager = null;
-		this._metaWorkspace = null;
-		this._windowList = null;
-	}
+    destroy: function() {
+        this._onDestroy();
+        this._transparencyManager = null;
+        this._metaWorkspace = null;
+        this._windowList = null;
+    }
 });
 
-const GlobalManager = new Lang.Class({
-	Name: 'WorkspaceList',
+const ShellManager = new Lang.Class({
+    Name: 'ShellManager',
 
-	_init: function(transparencyManager, settings) {
-		this._settings = settings;
-		this._transparencyManager = transparencyManager;
-		this._currentWorkspace = new WorkspaceManager(transparencyManager, global.screen.get_active_workspace());
-		this._currentWorkspace.updatePanelTransparency();
+    _init: function(transparencyManager, settings) {
+        this._settings = settings;
+        this._transparencyManager = transparencyManager;
+        this._currentWorkspace = new WorkspaceManager(transparencyManager, global.screen.get_active_workspace());
+        this._currentWorkspace.updatePanelTransparency();
 
-		this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
-		this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
-		this._notifyHideOverviewId = Main.overview.connect('hiding',  Lang.bind(this, this._hideOverview));
-		this._overviewOpen = false;
+        this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
+        this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
+        this._notifyHideOverviewId = Main.overview.connect('hiding', Lang.bind(this, this._hideOverview));
+        this._overviewOpen = false;
 
-		this._notifySettingsId = this._settings.connect('changed', Lang.bind(this, this._settingsUpdate))
-	},
+        this._notifySettingsId = this._settings.connect('changed', Lang.bind(this, this._settingsUpdate));
+    },
 
-	_switchWorkspace: function(winManager, previousWkId, newWkId) {
-		this._currentWorkspace.destroy();
-		delete this._currentWorkspace;
-		this._currentWorkspace = new WorkspaceManager(this._transparencyManager, global.screen.get_workspace_by_index(newWkId));
-		if(this._overviewOpen)
-			this._transparencyManager.setTransparent();
-		else
-			this._currentWorkspace.updatePanelTransparency();
-	},
+    _switchWorkspace: function(winManager, previousWkId, newWkId) {
+        this._currentWorkspace.destroy();
+        delete this._currentWorkspace;
+        this._currentWorkspace = new WorkspaceManager(this._transparencyManager, global.screen.get_workspace_by_index(newWkId));
+        if (this._overviewOpen)
+            this._transparencyManager.setTransparent();
+        else
+            this._currentWorkspace.updatePanelTransparency();
+    },
 
-	_showOverview: function() {
-		this._transparencyManager.setTransparent();
-		this._overviewOpen = true;
-	},
+    _showOverview: function() {
+        this._transparencyManager.setTransparent();
+        this._overviewOpen = true;
+    },
 
-	_hideOverview: function() {
-		this._currentWorkspace.updatePanelTransparency();
-		this._overviewOpen = false;
-	},
+    _hideOverview: function() {
+        this._currentWorkspace.updatePanelTransparency();
+        this._overviewOpen = false;
+    },
 
-	_onDestroy: function() {
-		global.window_manager.disconnect(this._notifySwitchId);
-		Main.overview.disconnect(this._notifyShowOverviewId);
-		Main.overview.disconnect(this._notifyHideOverviewId);
-		this._settings.disconnect(this._notifySettingsId);
-	},
+    _onDestroy: function() {
+        global.window_manager.disconnect(this._notifySwitchId);
+        Main.overview.disconnect(this._notifyShowOverviewId);
+        Main.overview.disconnect(this._notifyHideOverviewId);
+        this._settings.disconnect(this._notifySettingsId);
+    },
 
-	_settingsUpdate: function() {
-		//_showMessage('New style value ' + this._settings.get_string('style'));
-		this._transparencyManager.updateStyle(this._settings.get_string('style'));
-		this._currentWorkspace.updatePanelTransparency();
-	}
+    _settingsUpdate: function() {
+        debug('New style value ' + this._settings.get_string('style'), 'Notice');
+        this._transparencyManager.updateStyle(this._settings.get_string('style'));
+        this._transparencyManager.updateTransparencyLevel(this._settings.get_double('transparency-level'));
+        this._transparencyManager.updateButtonShadow(this._settings.get_boolean('button-shadow'));
+        this._currentWorkspace.updatePanelTransparency();
+    }
 });
 
 
@@ -264,19 +403,24 @@ function init() {
 }
 
 function enable() {
-	preferences = Convenience.getSettings();
-	topPanelTransparencyManager = new PanelTransparencyManager(Main.panel, preferences.get_string('style'));
-	new GlobalManager(topPanelTransparencyManager, preferences);
+    preferences = Convenience.getSettings();
+    topPanelTransparencyManager = new PanelTransparencyManager(
+        Main.panel,
+        preferences.get_string('style'),
+        preferences.get_double('transparency-level'),
+        preferences.get_boolean('button-shadow')
+    );
+    new ShellManager(topPanelTransparencyManager, preferences);
 }
 
 function disable() {
-	if(!topPanelTransparencyManager)
-	{
-		topPanelTransparencyManager = new PanelTransparencyManager(Main.panel);
-		topPanelTransparencyManager.setSolid();
-	}
-	else
-		topPanelTransparencyManager.setSolid();
+    if (!topPanelTransparencyManager)
+    {
+        topPanelTransparencyManager = new PanelTransparencyManager(Main.panel);
+        topPanelTransparencyManager.setSolid();
+    }
+    else
+        topPanelTransparencyManager.setSolid();
 
-	topPanelTransparencyManager = null;
+    topPanelTransparencyManager = null;
 }
