@@ -14,13 +14,11 @@ How-To Install
 
 Download
 --------
-You can download this extension from [Gnome website](https://extensions.gnome.org/extension/885/dynamic-top-bar/) but it is probably outdated.
+You can download this extension with various methods:
 
-You can also download a zip, to install it from Gnome Tweak Tool, from here : https://owncloud.feildel.fr/public.php?service=files&t=393294e474574a33ec624768f2423c73
-
-Or you can download a tar.gz copy of the repo and use the install.sh script, see here : https://owncloud.feildel.fr/public.php?service=files&t=393294e474574a33ec624768f2423c73
-
-
+- from [Gnome website](https://extensions.gnome.org/extension/885/dynamic-top-bar/)
+- Using the latest release posted on GitHub https://github.com/AMDG2/GnomeShell_DynamicTopBar/releases
+- By cloning the repo
 
 Install
 -------
