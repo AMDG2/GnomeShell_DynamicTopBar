@@ -228,7 +228,7 @@ const WindowManager = new Lang.Class({
      * @return {Number} The monitor index
      */
     getMonitorIndex: function() {
-        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_outer_rect());
+        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_frame_rect());
     },
 
     /**
