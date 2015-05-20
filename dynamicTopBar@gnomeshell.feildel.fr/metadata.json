@@ -4,7 +4,8 @@
   "shell-version": [
   	"3.10",
     "3.12",
-    "3.14"
+    "3.14",
+    "3.16"
   ],
   "extension-id": "dynamic-top-bar",
   "settings-schema": "org.gnome.shell.extensions.dynamic-top-bar",
