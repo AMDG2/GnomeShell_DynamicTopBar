@@ -51,6 +51,7 @@ const PrefWindow = new GObject.Class({
 		this._addStyleSelectorWidget();
 		this._addTransparencyLevelWidget();
 		this._addBtnShadowSwitch();
+		this._addBtnShowActivitySwitch();
 
 		// Insert main container
 		this.add(this._widgets.box);
@@ -160,6 +161,27 @@ const PrefWindow = new GObject.Class({
 		this._widgets.btnShadowSwitch.connect ('notify::active', Lang.bind (this, this._btnShadowUpdate));
 	},
 
+	_addBtnShowActivitySwitch: function() {
+		var label = new Gtk.Label({
+			label: '<b>'+_("Show Activity button text")+'</b>',
+			use_markup: true,
+			halign: Gtk.Align.START
+		});
+
+		this._widgets.btnShowActivity = new Gtk.Switch({active: this._settings.get_boolean('show-activity')});
+
+		let hbox = new Gtk.Box({
+			orientation: Gtk.Orientation.HORIZONTAL,
+		});
+
+		hbox.pack_start(label, true, true, 0);
+		hbox.add(this._widgets.btnShowActivity);
+
+		this._widgets.box.add(hbox);
+
+		this._widgets.btnShowActivity.connect ('notify::active', Lang.bind (this, this._btnShowActivityUpdate));
+	},
+
 	_styleChanged: function() {
 		let selection = this._widgets.style.get_active();
 		log('New selection : ' + selection);
@@ -178,6 +200,11 @@ const PrefWindow = new GObject.Class({
 	_btnShadowUpdate: function() {
 		let value = this._widgets.btnShadowSwitch.get_active();
 		this._settings.set_boolean('button-shadow', value);
+	},
+
+	_btnShowActivityUpdate: function() {
+		let value = this._widgets.btnShowActivity.get_active();
+		this._settings.set_boolean('show-activity', value);
 	}
 });
 
