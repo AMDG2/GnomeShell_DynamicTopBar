@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: dynamicTopBar Gnome Shell Extension\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-17 18:39+0100\n"
-"PO-Revision-Date: 2015-05-21 21:33+0100\n"
+"PO-Revision-Date: 2015-05-26 19:39+0100\n"
 "Last-Translator: Jiří Doubravský <jiri.doubravsky@gmail.com>\n"
 "Language-Team: CZECH <jiri.doubravsky@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,3 +36,7 @@ msgstr "Míra průhlednosti"
 #: prefs.js:144
 msgid "Button shadow"
 msgstr "Stín pod aktivními prvky"
+
+#: prefs.js:166
+msgid "Show Activity button text"
+msgstr "Viditelný text tlačítka Činnosti"
