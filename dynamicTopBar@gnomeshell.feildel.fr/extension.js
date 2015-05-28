@@ -181,7 +181,6 @@ const PanelTransparencyManager = new Lang.Class({
                 style += 'background-gradient-direction: vertical;';
 
                 corner_style = '-panel-corner-background-color: transparent;';
-                corner_style += '-panel-corner-border-color: transparent;';
             break;
 
             case 'transparency':
@@ -189,7 +188,6 @@ const PanelTransparencyManager = new Lang.Class({
                 style = 'background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
-                corner_style += '-panel-corner-border-color: transparent;';
             break;
         }
 
