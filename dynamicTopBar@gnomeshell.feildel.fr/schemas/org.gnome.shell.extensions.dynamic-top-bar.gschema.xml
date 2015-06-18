@@ -20,5 +20,10 @@
         <default>true</default>
         <summary>Display a shadow below buttons</summary>
     </key>
+
+    <key name="show-activity" type="b">
+        <default>true</default>
+        <summary>Show the activity button</summary>
+    </key>
   </schema>
 </schemalist>

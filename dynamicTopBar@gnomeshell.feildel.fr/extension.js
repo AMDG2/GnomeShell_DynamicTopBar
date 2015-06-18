@@ -48,14 +48,15 @@ const PanelTransparencyManager = new Lang.Class({
      * @param  {Object} panel The panel to manage
      * @param  {String} style The style to use, could be 'transparency' or 'gradient'
      */
-    _init: function(panel, style, transparencyLevel, buttonShadow) {
-        this._panel = panel.actor;
-        this._leftCorner  = panel._leftCorner.actor;
-        this._rightCorner = panel._rightCorner.actor;
-        this._style = style || 'transparency';
-        this._isTransp = true;
-
-        this._btnShadow = buttonShadow;
+    _init: function(panel, style, transparencyLevel, buttonShadow, showActivity) {
+        this._panel        = panel.actor;
+        this._leftCorner   = panel._leftCorner.actor;
+        this._rightCorner  = panel._rightCorner.actor;
+        this._style        = style || 'transparency';
+        this._activityBtn  = panel._leftBox.get_children()[0];
+        this._showActivity = showActivity;
+        this._isTransp     = true;
+        this._btnShadow    = buttonShadow;
 
         this._color = {
             'r': 0,
@@ -107,6 +108,11 @@ const PanelTransparencyManager = new Lang.Class({
         if(retransp) this.setTransparent();
     },
 
+    updateShowActivity: function(newBool) {
+        this._showActivity = newBool;
+        this._updateActivityBtnState();
+    },
+
     /**
      * Set the panel transparent
      */
@@ -125,6 +131,22 @@ const PanelTransparencyManager = new Lang.Class({
         debug('Style used : solid', 'Notice');
         this._isTransp = false;
         this._resetStyle();
+    },
+
+    /**
+     * Force activity button text state
+     */
+    _showActivityBtn: function() {
+        this._panel.remove_style_class_name('dynamic-top-bar-hide-activity-btn');
+    },
+
+    _hideActivityBtn: function() {
+        this._panel.add_style_class_name('dynamic-top-bar-hide-activity-btn');
+    },
+
+    _updateActivityBtnState: function() {
+        if(this._showActivity) this._showActivityBtn();
+        else                   this._hideActivityBtn();
     },
 
     _setStyle: function(styles) {
@@ -159,7 +181,6 @@ const PanelTransparencyManager = new Lang.Class({
                 style += 'background-gradient-direction: vertical;';
 
                 corner_style = '-panel-corner-background-color: transparent;';
-                corner_style += '-panel-corner-border-color: transparent;';
             break;
 
             case 'transparency':
@@ -167,7 +188,6 @@ const PanelTransparencyManager = new Lang.Class({
                 style = 'background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
-                corner_style += '-panel-corner-border-color: transparent;';
             break;
         }
 
@@ -228,7 +248,7 @@ const WindowManager = new Lang.Class({
      * @return {Number} The monitor index
      */
     getMonitorIndex: function() {
-        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_outer_rect());
+        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_frame_rect());
     },
 
     /**
@@ -384,6 +404,7 @@ const ShellManager = new Lang.Class({
         this._transparencyManager.updateStyle(this._settings.get_string('style'));
         this._transparencyManager.updateTransparencyLevel(this._settings.get_double('transparency-level'));
         this._transparencyManager.updateButtonShadow(this._settings.get_boolean('button-shadow'));
+        this._transparencyManager.updateShowActivity(this._settings.get_boolean('show-activity'));
         this._currentWorkspace.updatePanelTransparency();
     }
 });
@@ -408,7 +429,8 @@ function enable() {
         Main.panel,
         preferences.get_string('style'),
         preferences.get_double('transparency-level'),
-        preferences.get_boolean('button-shadow')
+        preferences.get_boolean('button-shadow'),
+        preferences.get_boolean('show-activity')
     );
     new ShellManager(topPanelTransparencyManager, preferences);
 }

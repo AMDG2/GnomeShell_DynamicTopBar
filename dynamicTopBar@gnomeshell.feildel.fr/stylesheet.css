@@ -5,6 +5,10 @@
 	color: #fff;
 }
 
+.dynamic-top-bar-hide-activity-btn #panelActivities {
+	color: rgba(0,0,0,0);
+}
+
 .dynamic-top-bar-btn-shadow .panel-button {
 	text-shadow: #000 0px 3px 5px;
 }
