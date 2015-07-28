@@ -179,7 +179,7 @@ const PanelTransparencyManager = new Lang.Class({
                 style += 'background-gradient-start: rgba(0,0,0,0.8);';
                 style += 'background-gradient-end: rgba(0,0,0,0);';
                 style += 'background-gradient-direction: vertical;';
-				style += 'border-color: rgba(0,0,0,0);';
+                style += 'border-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: transparent;';
             break;
@@ -187,7 +187,7 @@ const PanelTransparencyManager = new Lang.Class({
             case 'transparency':
             default:
                 style = 'background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
-				style += 'border-color: rgba(0,0,0,0);';
+                style += 'border-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
             break;
