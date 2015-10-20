@@ -18,19 +18,19 @@ msgstr ""
 "Language: cs\n"
 
 #: prefs.js:61
-msgid "Tranparency style"
+msgid "Transparency style"
 msgstr "Styl zprůhlednění"
 
 #: prefs.js:74
-msgid "transparency"
+msgid "Transparency"
 msgstr "jednoduchá průhlednost"
 
 #: prefs.js:80
-msgid "gradient"
+msgid "Gradient"
 msgstr "postupné splynutí"
 
 #: prefs.js:111
-msgid "Tranparency level"
+msgid "Transparency level"
 msgstr "Míra průhlednosti"
 
 #: prefs.js:144

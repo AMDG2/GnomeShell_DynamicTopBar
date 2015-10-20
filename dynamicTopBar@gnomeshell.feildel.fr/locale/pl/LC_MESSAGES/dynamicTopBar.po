@@ -18,19 +18,19 @@ msgstr ""
 "Language: pl\n"
 
 #: prefs.js:61
-msgid "Tranparency style"
+msgid "Transparency style"
 msgstr "Styl przezroczystości"
 
 #: prefs.js:74
-msgid "transparency"
+msgid "Transparency"
 msgstr "przezroczystość"
 
 #: prefs.js:80
-msgid "gradient"
-msgstr "gradient"
+msgid "Gradient"
+msgstr "Gradient"
 
 #: prefs.js:111
-msgid "Tranparency level"
+msgid "Transparency level"
 msgstr "Poziom przezroczystości"
 
 #: prefs.js:144

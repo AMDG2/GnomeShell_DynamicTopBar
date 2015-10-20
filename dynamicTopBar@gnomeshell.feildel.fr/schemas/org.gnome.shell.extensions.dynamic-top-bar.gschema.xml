@@ -1,7 +1,7 @@
 <schemalist gettext-domain="dynamic-top-bar">
   <enum id="org.gnome.shell.extensions.dynamic-top-bar.style">
-    <value value="0" nick="transparency"/>
-    <value value="1" nick="gradient"/>
+    <value value="0" nick="Transparency"/>
+    <value value="1" nick="Gradient"/>
   </enum>
   <schema
     id="org.gnome.shell.extensions.dynamic-top-bar"

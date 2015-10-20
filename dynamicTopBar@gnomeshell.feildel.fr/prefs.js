@@ -59,7 +59,7 @@ const PrefWindow = new GObject.Class({
 
 	_addStyleSelectorWidget: function() {
 		var label = new Gtk.Label({
-			label: '<b>'+_("Tranparency style")+'</b>',
+			label: '<b>'+_("Transparency style")+'</b>',
 			use_markup: true,
 			halign: Gtk.Align.START
 		});
@@ -72,13 +72,13 @@ const PrefWindow = new GObject.Class({
 		styleList.set(
 			styleList.append(),
 			[0],
-			[_("transparency")]
+			[_("Transparency")]
 		);
 
 		styleList.set(
 			styleList.append(),
 			[0],
-			[_("gradient")]
+			[_("Gradient")]
 		);
 
         let rendererText = new Gtk.CellRendererText();
@@ -90,7 +90,7 @@ const PrefWindow = new GObject.Class({
         this._widgets.style.pack_start (rendererText, false);
         this._widgets.style.add_attribute (rendererText, "text", 0);
 
-        if(this._settings.get_string('style') == "transparency")
+        if(this._settings.get_string('style') == "Transparency")
         	this._widgets.style.set_active(0);
         else
         	this._widgets.style.set_active(1);
@@ -109,7 +109,7 @@ const PrefWindow = new GObject.Class({
 
 	_addTransparencyLevelWidget: function() {
 		var label = new Gtk.Label({
-			label: '<b>'+_("Tranparency level")+'</b>',
+			label: '<b>'+_("Transparency level")+'</b>',
 			use_markup: true,
 			halign: Gtk.Align.START
 		});
