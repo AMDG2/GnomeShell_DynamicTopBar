@@ -18,19 +18,19 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 
 #: prefs.js:61
-msgid "Tranparency style"
+msgid "Transparency style"
 msgstr "Transparenzstil"
 
 #: prefs.js:74
-msgid "transparency"
+msgid "Transparency"
 msgstr "Transparenz"
 
 #: prefs.js:80
-msgid "gradient"
+msgid "Gradient"
 msgstr "Verlauf"
 
 #: prefs.js:111
-msgid "Tranparency level"
+msgid "Transparency level"
 msgstr "Transparenzstufe"
 
 #: prefs.js:144
