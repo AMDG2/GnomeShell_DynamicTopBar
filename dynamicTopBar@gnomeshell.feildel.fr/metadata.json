@@ -13,5 +13,5 @@
   "settings-schema": "org.gnome.shell.extensions.dynamic-top-bar",
   "url": "http://github.com/AMDG2/GnomeShell_DynamicTopBar",
   "uuid": "dynamicTopBar@gnomeshell.feildel.fr",
-  "version": 15
+  "version": 16
 }
