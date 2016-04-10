@@ -6,7 +6,8 @@
     "3.12",
     "3.14",
     "3.16",
-    "3.18"
+    "3.18",
+    "3.20"
   ],
   "extension-id": "dynamic-top-bar",
   "settings-schema": "org.gnome.shell.extensions.dynamic-top-bar",
