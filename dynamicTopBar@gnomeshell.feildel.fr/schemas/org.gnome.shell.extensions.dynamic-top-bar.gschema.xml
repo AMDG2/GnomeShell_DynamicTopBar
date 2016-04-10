@@ -7,7 +7,7 @@
     id="org.gnome.shell.extensions.dynamic-top-bar"
     path="/org/gnome/shell/extensions/dynamic-top-bar/">
     <key name="style" enum="org.gnome.shell.extensions.dynamic-top-bar.style">
-      <default>'transparency'</default>
+      <default>'Transparency'</default>
       <summary>Choose the top bar transparency style : gradient or full transparency</summary>
     </key>
 
