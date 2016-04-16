@@ -168,6 +168,8 @@ const PanelTransparencyManager = new Lang.Class({
 
         this._panel.remove_style_class_name('dynamic-top-bar-white-btn');
         this._panel.remove_style_class_name('dynamic-top-bar-btn-shadow');
+        this._panel.remove_style_class_name('dynamic-top-bar-gradient');
+        this._panel.remove_style_class_name('dynamic-top-bar-transparent');
     },
 
     _applyStyle: function() {
@@ -182,6 +184,7 @@ const PanelTransparencyManager = new Lang.Class({
                 style += 'border-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: transparent;';
+                this._panel.add_style_class_name('dynamic-top-bar-gradient');
             break;
 
             case 'transparency':
@@ -190,6 +193,7 @@ const PanelTransparencyManager = new Lang.Class({
                 style += 'border-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
 
                 corner_style = '-panel-corner-background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
+                this._panel.add_style_class_name('dynamic-top-bar-transparent');
             break;
         }
 
