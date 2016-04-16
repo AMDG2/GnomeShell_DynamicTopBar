@@ -14,11 +14,11 @@ const Gettext = imports.gettext.domain('dynamicTopBar');
 const _ = Gettext.gettext;
 
 function debug(msg, level) {
-    if (typeof level == 'string')
+    /*if (typeof level == 'string')
         level = ' ' + level + ' **: ';
     else
         level = '';
-    log('DynamicTopBar-pref: ' + level + msg);
+    log('DynamicTopBar-pref: ' + level + msg);*/
 }
 
 const PrefWindow = new GObject.Class({

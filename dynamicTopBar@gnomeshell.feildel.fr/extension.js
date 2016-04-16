@@ -30,11 +30,11 @@ const Convenience = Me.imports.convenience;
  * And then use debug() function to display message in the console.
  */
 function debug(msg, level) {
-    if (typeof level == 'string')
+    /*if (typeof level == 'string')
         level = ' ' + level + ' **: ';
     else
         level = '';
-    log('DynamicTopBar: ' + level + msg);
+    log('DynamicTopBar: ' + level + msg);*/
 }
 
 /*
