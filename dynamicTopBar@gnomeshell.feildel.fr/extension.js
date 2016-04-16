@@ -30,11 +30,11 @@ const Convenience = Me.imports.convenience;
  * And then use debug() function to display message in the console.
  */
 function debug(msg, level) {
-    /*if (typeof level == 'string')
+    if (typeof level == 'string')
         level = ' ' + level + ' **: ';
     else
         level = '';
-    global.log('DynamicTopBar: ' + level + msg);*/
+    log('DynamicTopBar: ' + level + msg);
 }
 
 /*
@@ -52,7 +52,7 @@ const PanelTransparencyManager = new Lang.Class({
         this._panel        = panel.actor;
         this._leftCorner   = panel._leftCorner.actor;
         this._rightCorner  = panel._rightCorner.actor;
-        this._style        = style || 'transparency';
+        this._style        = style || 'Transparency';
         this._activityBtn  = panel._leftBox.get_children()[0];
         this._showActivity = showActivity;
         this._isTransp     = true;
@@ -77,7 +77,7 @@ const PanelTransparencyManager = new Lang.Class({
             retransp = true;
         }
 
-        if (newStyle == 'transparency' || newStyle == 'gradient')
+        if (newStyle == 'Transparency' || newStyle == 'Gradient')
             this._style = newStyle;
 
         if (retransp) this.setTransparent();
@@ -176,7 +176,7 @@ const PanelTransparencyManager = new Lang.Class({
         let style = '';
         let corner_style = '';
         switch (this._style) {
-            case 'gradient':
+            case 'Gradient':
                 style = 'background-color: transparent;';
                 style += 'background-gradient-start: rgba(0,0,0,0.8);';
                 style += 'background-gradient-end: rgba(0,0,0,0);';
@@ -187,7 +187,7 @@ const PanelTransparencyManager = new Lang.Class({
                 this._panel.add_style_class_name('dynamic-top-bar-gradient');
             break;
 
-            case 'transparency':
+            case 'Transparency':
             default:
                 style = 'background-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';
                 style += 'border-color: rgba('+this._color.r+','+this._color.g+','+this._color.b+','+this._color.a+');';

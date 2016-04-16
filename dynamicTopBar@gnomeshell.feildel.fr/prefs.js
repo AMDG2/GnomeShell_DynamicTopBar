@@ -18,7 +18,7 @@ function debug(msg, level) {
         level = ' ' + level + ' **: ';
     else
         level = '';
-    global.log('DynamicTopBar-pref: ' + level + msg);
+    log('DynamicTopBar-pref: ' + level + msg);
 }
 
 const PrefWindow = new GObject.Class({
@@ -186,9 +186,9 @@ const PrefWindow = new GObject.Class({
 		let selection = this._widgets.style.get_active();
 		log('New selection : ' + selection);
 		if(selection == 0)
-			this._settings.set_string('style', 'transparency');
+			this._settings.set_string('style', 'Transparency');
 		else
-			this._settings.set_string('style', 'gradient');
+			this._settings.set_string('style', 'Gradient');
 	},
 
 	_transparencyLevelChanged: function() {
