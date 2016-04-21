@@ -19,16 +19,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
-
-/*
- * Debug tool
- * To debug this extension you can start a gnome-shell instance
- * from a terminal :
- *
- * $ gnome-shell --replace
- *
- * And then use debug() function to display message in the console.
- */
 function debug(msg, level) {
     /*if (typeof level == 'string')
         level = ' ' + level + ' **: ';
@@ -116,9 +106,13 @@ const PanelTransparencyManager = new Lang.Class({
     /**
      * Set the panel transparent
      */
-    setTransparent: function() {
+    setTransparent: function(source) {
         // Add transparency
         debug('Style used : ' + this._style, 'Notice');
+
+        if(source != undefined)
+            debug('Source: ' + source, 'Notice');
+
         this._isTransp = true;
         this._applyStyle();
     },
@@ -126,9 +120,13 @@ const PanelTransparencyManager = new Lang.Class({
     /**
      * The the panel solid
      */
-    setSolid: function() {
+    setSolid: function(source) {
         // Restore opacity
         debug('Style used : solid', 'Notice');
+
+        if(source != undefined)
+            debug('Source: ' + source, 'Notice');
+
         this._isTransp = false;
         this._resetStyle();
     },
@@ -314,11 +312,14 @@ const WorkspaceManager = new Lang.Class({
         return false;
     },
 
-    updatePanelTransparency: function() {
+    updatePanelTransparency: function(source) {
+        if(source != undefined)
+            debug('WorkspaceManager.updatePanelTransparency source: ' + source, 'Notice');
+
         if (this.isAnyWindowMaximized())
-            this._transparencyManager.setSolid();
+            this._transparencyManager.setSolid('WorkspaceManager.updatePanelTransparency');
         else
-            this._transparencyManager.setTransparent();
+            this._transparencyManager.setTransparent('WorkspaceManager.updatePanelTransparency');
     },
 
     _haveWindow: function(metaWindow) {
@@ -329,20 +330,26 @@ const WorkspaceManager = new Lang.Class({
     },
 
     _addWindow: function(metaWorkspace, metaWindow) {
+        if (metaWindow.get_wm_class() == "Gnome-shell")
+            return;
+
         if (!this._haveWindow(metaWindow))
             this._windowList.push(new WindowManager(metaWindow, this));
 
-        this.updatePanelTransparency();
+        this.updatePanelTransparency('WindowManager._addWindow, window:' + metaWindow.get_wm_class());
     },
 
     _removeWindow: function(metaWorkspace, metaWindow) {
+        if (metaWindow.get_wm_class() == "Gnome-shell")
+            return;
+
         for (let i = 0; i < this._windowList.length; i++)
             if (this._windowList[i].equals(metaWindow)) {
                 this._windowList[i].destroy();
                 this._windowList.splice(i, 1);
             }
 
-        this.updatePanelTransparency();
+        this.updatePanelTransparency('WindowManager._removeWindow, window:' + metaWindow.get_wm_class());
     },
 
     _onDestroy: function() {
@@ -368,7 +375,7 @@ const ShellManager = new Lang.Class({
         this._settings = settings;
         this._transparencyManager = transparencyManager;
         this._currentWorkspace = new WorkspaceManager(transparencyManager, global.screen.get_active_workspace());
-        this._currentWorkspace.updatePanelTransparency();
+        this._currentWorkspace.updatePanelTransparency('ShellManager._init');
 
         this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
         this._notifyShowOverviewId = Main.overview.connect('showing', Lang.bind(this, this._showOverview));
@@ -383,18 +390,18 @@ const ShellManager = new Lang.Class({
         delete this._currentWorkspace;
         this._currentWorkspace = new WorkspaceManager(this._transparencyManager, global.screen.get_workspace_by_index(newWkId));
         if (this._overviewOpen)
-            this._transparencyManager.setTransparent();
+            this._transparencyManager.setTransparent('ShellManager._switchWorkspace');
         else
-            this._currentWorkspace.updatePanelTransparency();
+            this._currentWorkspace.updatePanelTransparency('ShellManager._switchWorkspace');
     },
 
     _showOverview: function() {
-        this._transparencyManager.setTransparent();
+        this._transparencyManager.setTransparent('ShellManager._showOverview');
         this._overviewOpen = true;
     },
 
     _hideOverview: function() {
-        this._currentWorkspace.updatePanelTransparency();
+        this._currentWorkspace.updatePanelTransparency('ShellManager._hideOverview');
         this._overviewOpen = false;
     },
 
@@ -411,7 +418,7 @@ const ShellManager = new Lang.Class({
         this._transparencyManager.updateTransparencyLevel(this._settings.get_double('transparency-level'));
         this._transparencyManager.updateButtonShadow(this._settings.get_boolean('button-shadow'));
         this._transparencyManager.updateShowActivity(this._settings.get_boolean('show-activity'));
-        this._currentWorkspace.updatePanelTransparency();
+        this._currentWorkspace.updatePanelTransparency('ShellManager._settingsUpdate');
     }
 });
 
