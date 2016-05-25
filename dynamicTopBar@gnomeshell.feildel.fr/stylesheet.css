@@ -7,6 +7,7 @@
 
 .dynamic-top-bar-hide-activity-btn #panelActivities {
 	color: rgba(0,0,0,0);
+	background: none; /* blue line under the active "Activity" button */
 }
 
 .dynamic-top-bar-btn-shadow .panel-button {
