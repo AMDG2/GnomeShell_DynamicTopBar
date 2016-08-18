@@ -33,3 +33,21 @@ gnome-shell-extension-tool -e dynamicTopBar@gnomeshell.feildel.fr
 ```
 
 Or you can use the `install.sh` script.
+
+Theme compatibility
+===================
+
+Not all theme are compatible with this extension.
+
+- If you are a theme developper please read the following paragraph.
+- If you are a theme user and the extension seems broken please report the issue in this repository and to the theme developper
+
+Theme developper information
+----------------------------
+
+If your theme use images to style the panel look it won't be compatible with the extension without work.
+
+The extension only style the `background-color` property of the panel. But your theme may use the following classes to detect when the panel should be transparent or gradient :
+
+- `dynamic-top-bar-transparency`
+- `dynamic-top-bar-gradient`
