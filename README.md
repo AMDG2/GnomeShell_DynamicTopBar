@@ -31,6 +31,7 @@ for example.
 cp -r dynamicTopBar@gnomeshell.feildel.fr ~/.local/share/gnome-shell/extensions
 gnome-shell-extension-tool -e dynamicTopBar@gnomeshell.feildel.fr
 ```
+Might require a Gnome restart. Press ALT+F2 and type 'r' and hit enter.
 
 Or you can use the `install.sh` script.
 
@@ -39,10 +40,10 @@ Theme compatibility
 
 Not all theme are compatible with this extension.
 
-- If you are a theme developper please read the following paragraph.
-- If you are a theme user and the extension seems broken please report the issue in this repository and to the theme developper
+- If you are a theme developer please read the following paragraph.
+- If you are a theme user and the extension seems broken please report the issue in this repository and to the theme developer
 
-Theme developper information
+Theme developer information
 ----------------------------
 
 If your theme use images to style the panel look it won't be compatible with the extension without work.
