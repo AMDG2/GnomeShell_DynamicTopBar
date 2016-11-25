@@ -37,16 +37,21 @@ const PanelTransparencyManager = new Lang.Class({
      * Constructor
      * @param  {Object} panel The panel to manage
      * @param  {String} style The style to use, could be 'transparency' or 'gradient'
+     * @param  {Number} transparencyLevel Transparency level, 0 fully transparent, 1 fully opaque
+     * @param  {Boolean} buttonShadow Display a shadow below buttons
+     * @param  {Boolean} alwaysTransparent Keep the panel always transparent
+     * @param  {Boolean} showActivity Show the activity button
      */
-    _init: function(panel, style, transparencyLevel, buttonShadow, showActivity) {
-        this._panel        = panel.actor;
-        this._leftCorner   = panel._leftCorner.actor;
-        this._rightCorner  = panel._rightCorner.actor;
-        this._style        = style || 'Transparency';
-        this._activityBtn  = panel._leftBox.get_children()[0];
-        this._showActivity = showActivity;
-        this._isTransp     = true;
-        this._btnShadow    = buttonShadow;
+    _init: function(panel, style, transparencyLevel, buttonShadow, alwaysTransparent, showActivity) {
+        this._panel             = panel.actor;
+        this._leftCorner        = panel._leftCorner.actor;
+        this._rightCorner       = panel._rightCorner.actor;
+        this._style             = style || 'Transparency';
+        this._activityBtn       = panel._leftBox.get_children()[0];
+        this._showActivity      = showActivity;
+        this._isTransp          = true;
+        this._btnShadow         = buttonShadow;
+        this._alwaysTransparent = alwaysTransparent;
 
         this._color = {
             'r': 0,
@@ -101,6 +106,10 @@ const PanelTransparencyManager = new Lang.Class({
     updateShowActivity: function(newBool) {
         this._showActivity = newBool;
         this._updateActivityBtnState();
+    },
+
+    updateAlwaysTransparent: function(newBool) {
+        this._alwaysTransparent = newBool;
     },
 
     /**
@@ -316,6 +325,11 @@ const WorkspaceManager = new Lang.Class({
         if(source != undefined)
             debug('WorkspaceManager.updatePanelTransparency source: ' + source, 'Notice');
 
+        if (this._transparencyManager._alwaysTransparent) {
+            this._transparencyManager.setTransparent('WorkspaceManager.updatePanelTransparency');
+            return;
+        }
+
         if (this.isAnyWindowMaximized())
             this._transparencyManager.setSolid('WorkspaceManager.updatePanelTransparency');
         else
@@ -417,6 +431,7 @@ const ShellManager = new Lang.Class({
         this._transparencyManager.updateStyle(this._settings.get_string('style'));
         this._transparencyManager.updateTransparencyLevel(this._settings.get_double('transparency-level'));
         this._transparencyManager.updateButtonShadow(this._settings.get_boolean('button-shadow'));
+        this._transparencyManager.updateAlwaysTransparent(this._settings.get_boolean('always-transparent'));
         this._transparencyManager.updateShowActivity(this._settings.get_boolean('show-activity'));
         this._currentWorkspace.updatePanelTransparency('ShellManager._settingsUpdate');
     }
@@ -443,6 +458,7 @@ function enable() {
         preferences.get_string('style'),
         preferences.get_double('transparency-level'),
         preferences.get_boolean('button-shadow'),
+        preferences.get_boolean('always-transparent'),
         preferences.get_boolean('show-activity')
     );
     new ShellManager(topPanelTransparencyManager, preferences);

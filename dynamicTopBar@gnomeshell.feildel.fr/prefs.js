@@ -51,6 +51,7 @@ const PrefWindow = new GObject.Class({
 		this._addStyleSelectorWidget();
 		this._addTransparencyLevelWidget();
 		this._addBtnShadowSwitch();
+		this._addBtnAlwaysTransparentSwitch();
 		this._addBtnShowActivitySwitch();
 
 		// Insert main container
@@ -140,6 +141,27 @@ const PrefWindow = new GObject.Class({
 		this._widgets.transparencyLevel.connect('value-changed', Lang.bind(this, this._transparencyLevelChanged));
 	},
 
+	_addBtnAlwaysTransparentSwitch: function() {
+		var label = new Gtk.Label({
+			label: '<b>'+_("Always transparent")+'</b>',
+			use_markup: true,
+			halign: Gtk.Align.START
+		});
+
+		this._widgets.btnAlwaysTransparentSwitch = new Gtk.Switch({active: this._settings.get_boolean('always-transparent')});
+
+		let hbox = new Gtk.Box({
+			orientation: Gtk.Orientation.HORIZONTAL,
+		});
+
+		hbox.pack_start(label, true, true, 0);
+		hbox.add(this._widgets.btnAlwaysTransparentSwitch);
+
+		this._widgets.box.add(hbox);
+
+		this._widgets.btnAlwaysTransparentSwitch.connect ('notify::active', Lang.bind (this, this._btnAlwaysTransparentUpdate));
+	},
+
 	_addBtnShadowSwitch: function() {
 		var label = new Gtk.Label({
 			label: '<b>'+_("Button shadow")+'</b>',
@@ -200,6 +222,11 @@ const PrefWindow = new GObject.Class({
 	_btnShadowUpdate: function() {
 		let value = this._widgets.btnShadowSwitch.get_active();
 		this._settings.set_boolean('button-shadow', value);
+	},
+
+	_btnAlwaysTransparentUpdate: function() {
+		let value = this._widgets.btnAlwaysTransparentSwitch.get_active();
+		this._settings.set_boolean('always-transparent', value);
 	},
 
 	_btnShowActivityUpdate: function() {

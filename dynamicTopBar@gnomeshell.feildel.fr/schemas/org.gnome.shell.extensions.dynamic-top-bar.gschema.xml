@@ -21,6 +21,11 @@
         <summary>Display a shadow below buttons</summary>
     </key>
 
+    <key name="always-transparent" type="b">
+        <default>false</default>
+        <summary>Always transparent</summary>
+    </key>
+
     <key name="show-activity" type="b">
         <default>true</default>
         <summary>Show the activity button</summary>
