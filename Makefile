@@ -22,5 +22,6 @@ translations: ${LOCALES_FILE}
 	msgfmt "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.mo"
 	msgfmt "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.mo"
 	msgfmt "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.mo"
+
 schema: ${SCHEMA_DIR}/${SCHEMA_FILE}
 	glib-compile-schemas "${SCHEMA_DIR}"
