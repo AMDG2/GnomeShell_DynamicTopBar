@@ -16,12 +16,12 @@ all: translations schema
 #	cd "${SRC_DIR}" && zip -r ../DynamicTopBar.zip *
 
 translations: ${LOCALES_FILE}
-	msgfmt "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.mo"
-	msgfmt "${LOCALE_DIR}/de/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/de/LC_MESSAGES/dynamicTopBar.mo"
-	msgfmt "${LOCALE_DIR}/fr/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/fr/LC_MESSAGES/dynamicTopBar.mo"
-	msgfmt "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.mo"
-	msgfmt "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.mo"
-	msgfmt "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/de/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/de/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/fr/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/fr/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pl/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/pt_BR/LC_MESSAGES/dynamicTopBar.mo"
+	@msgfmt "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/zh_CN/LC_MESSAGES/dynamicTopBar.mo"
 
 schema: ${SCHEMA_DIR}/${SCHEMA_FILE}
-	glib-compile-schemas "${SCHEMA_DIR}"
+	@glib-compile-schemas "${SCHEMA_DIR}"
