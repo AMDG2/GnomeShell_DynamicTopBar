@@ -1,12 +1,21 @@
 #!/bin/bash
 Parameter=$1
 
-CHECK_COMMAND(){
+CHECK_COMMAND_TWEAK(){
 
  if [ ! `command -v gnome-shell-extension-tool` ]; then
      return 1
  fi
 
+ if [ ! `command -v sudo` ]; then
+     return 1
+ fi
+}
+CHECK_COMMAND_SUDO(){
+
+ if [ ! `command -v sudo` ]; then
+     return 1
+ fi
 }
 ENABLE(){
 
@@ -39,10 +48,16 @@ esac
 
  printf "\033[32m check the necessary tools ... \033[0m\n"
 
-    CHECK_COMMAND
+    CHECK_COMMAND_TWEAK
 
  if [ "$?" != "0" ]; then
      printf "\033[31m gnome-tweak-tool not found!\033[0m\n"
+     exit 1
+ fi
+
+    CHECK_COMMAND_SUDO
+ if [ "$?" != "0" ]; then
+     printf "\033[31m sudo not found!\033[0m\n"
      exit 1
  fi
 
