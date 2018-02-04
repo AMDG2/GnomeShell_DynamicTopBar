@@ -35,6 +35,15 @@ Might require a Gnome restart. Press ALT+F2 and type 'r' and hit enter.
 
 Or you can use the `install.sh` script.
 
+If you want to install this extension to the directory: '/usr', use the following command to pass in the parameters.
+```bash
+./install.sh root
+```
+If you want to install this extension to the directory: '$HOME/.local', use the following command.
+```bash
+./install.sh
+```
+
 Theme compatibility
 ===================
 
