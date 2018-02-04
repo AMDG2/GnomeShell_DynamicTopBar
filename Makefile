@@ -10,10 +10,10 @@ LOCALES_FILE=$(wildcard ${LOCALE_DIR}/*/LC_MESSAGES/dynamicTopBar.po)
 SCHEMA_DIR=${SRC_DIR}/schemas
 SCHEMA_FILE=org.gnome.shell.extensions.dynamic-top-bar.gschema.xml
 
-all: zip
+all: translations schema
 
-zip: translations schema
-	cd "${SRC_DIR}" && zip -r ../DynamicTopBar.zip *
+#zip: translations schema
+#	cd "${SRC_DIR}" && zip -r ../DynamicTopBar.zip *
 
 translations: ${LOCALES_FILE}
 	msgfmt "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.po" -o "${LOCALE_DIR}/cs/LC_MESSAGES/dynamicTopBar.mo"
