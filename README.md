@@ -1,8 +1,10 @@
+# DISCLAIMER
+
 This extension was usefull back in the days, but now that Gnome has included a similar feature I didn't need it anymore. If you want to takeover the maintenance and the development feel free to open an issue to discuss that topic.
 
 I will only continue to merge pull-request for translations, maybe bugfixes or new features, but I will not fix bugs or implement new features myself.
 
-
+---
 
 Dynamic Top Bar
 ===============
