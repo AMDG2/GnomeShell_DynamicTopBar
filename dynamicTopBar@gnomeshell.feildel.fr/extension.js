@@ -27,6 +27,14 @@ function debug(msg, level) {
     log('DynamicTopBar: ' + level + msg);*/
 }
 
+function _getScreen() {
+    return global.screen || global.display;
+}
+
+function _getWorkspaceManager() {
+    return global.screen || global.workspace_manager;
+}
+
 /*
  * Panel transparency manager
  */
@@ -252,7 +260,7 @@ const WindowManager = new Lang.Class({
      * @return {Number} The monitor index
      */
     getMonitorIndex: function() {
-        return global.screen.get_monitor_index_for_rect(this._metaWindow.get_frame_rect());
+        return _getScreen().get_monitor_index_for_rect(this._metaWindow.get_frame_rect());
     },
 
     /**
@@ -374,7 +382,7 @@ const ShellManager = new Lang.Class({
     _init: function(transparencyManager, settings) {
         this._settings = settings;
         this._transparencyManager = transparencyManager;
-        this._currentWorkspace = new WorkspaceManager(transparencyManager, global.screen.get_active_workspace());
+        this._currentWorkspace = new WorkspaceManager(transparencyManager, _getWorkspaceManager().get_active_workspace());
         this._currentWorkspace.updatePanelTransparency('ShellManager._init');
 
         this._notifySwitchId = global.window_manager.connect('switch-workspace', Lang.bind(this, this._switchWorkspace));
@@ -388,7 +396,7 @@ const ShellManager = new Lang.Class({
     _switchWorkspace: function(winManager, previousWkId, newWkId) {
         this._currentWorkspace.destroy();
         delete this._currentWorkspace;
-        this._currentWorkspace = new WorkspaceManager(this._transparencyManager, global.screen.get_workspace_by_index(newWkId));
+        this._currentWorkspace = new WorkspaceManager(this._transparencyManager, _getWorkspaceManager().get_workspace_by_index(newWkId));
         if (this._overviewOpen)
             this._transparencyManager.setTransparent('ShellManager._switchWorkspace');
         else
